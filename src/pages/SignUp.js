@@ -2,7 +2,7 @@
  * @Author: zuhong.wu 
  * @Date: 2018-03-26 12:39:40 
  * @Last Modified by: zuhong.wu
- * @Last Modified time: 2018-03-27 10:04:35
+ * @Last Modified time: 2018-04-23 09:42:01
  */
 'use strict';
 
@@ -20,52 +20,45 @@ class SignUp extends React.Component {
     state = {
         signError: ''//注册时响应后台的错误信息
     }
-    componentDidMount(){
+    componentDidMount() {
     }
     submit = () => {
         this.props.form.validateFields((error, value) => {
             //如果校验通过则响应后台
             if (!error) {
                 Toast.loading('登录中…', 0);
-                userService.checkUser(value).then(exist => {
-                    //如果帐号、昵称、店名已存在，则提示错误信息
-                    if (exist) {
-                        let errors = {};
-                        if (exist.name) {
-                            errors.name = {
-                                value: values.name,
-                                errors: [new Error('帐号已被占用！')],
-                            }
-                        } else if (exist.nickname) {
-                            errors.nickname = {
-                                value: values.nickname,
-                                errors: [new Error('昵称已被占用！')],
-                            }
-                        } else if (exist.storename) {
-                            errors.storename = {
-                                value: values.storename,
-                                errors: [new Error('店名已被占用！')],
-                            }
+                const exist = userService.checkUser(value);
+                //如果帐号、昵称、店名已存在，则提示错误信息
+                if (exist) {
+                    let errors = {};
+                    if (exist.name) {
+                        errors.name = {
+                            value: values.name,
+                            errors: [new Error('帐号已被占用！')],
                         }
-                        this.props.form.setFields(errors);
-                    } else {
-                        userService.addUser(value, null).then(data => {
-                            this.setState({
-                                signError: ''
-                            })
-                            Toast.success('注册成功！即将去登录！', 2, ()=>{
-                                const { navigate } = this.props.navigation;
-                                navigate('Login', { name: data.name });
-                            })
-                        })
+                    } else if (exist.nickname) {
+                        errors.nickname = {
+                            value: values.nickname,
+                            errors: [new Error('昵称已被占用！')],
+                        }
+                    } else if (exist.storename) {
+                        errors.storename = {
+                            value: values.storename,
+                            errors: [new Error('店名已被占用！')],
+                        }
                     }
-                    Toast.hide();
-                }).catch(error => {
+                    this.props.form.setFields(errors);
+                } else {
+                    const data = userService.addUser(value, null)
                     this.setState({
-                        signError: '后台错误！请联系系统管理员！'
+                        signError: ''
                     })
-                    Toast.hide();
-                })
+                    Toast.success('注册成功！即将去登录！', 2, () => {
+                        const { navigate } = this.props.navigation;
+                        navigate('Login', { name: data.name });
+                    })
+                }
+                Toast.hide();
             }
         })
     }

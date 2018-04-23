@@ -2,7 +2,7 @@
  * @Author: zuhong.wu 
  * @Date: 2018-03-27 10:35:50 
  * @Last Modified by: zuhong.wu
- * @Last Modified time: 2018-04-04 15:09:02
+ * @Last Modified time: 2018-04-23 09:39:47
  */
 'use strict';
 
@@ -39,43 +39,7 @@ class Record extends React.Component {
     state = {
         selectedDate: null,//选中的日期时间戳（毫秒）
         isRefresh: false,
-        records: [{
-            operator: '小明',
-            number: '12121212',
-            date: '2017-09-12',
-            type: '进货',
-            money: 100
-        }, {
-            operator: '小赵',
-            number: '12121212',
-            date: '2017-09-12',
-            type: '进货',
-            money: 100
-        }, {
-            operator: '小吴',
-            number: '12121212',
-            date: '2017-09-12',
-            type: '进货',
-            money: 100
-        }, {
-            operator: '小刘',
-            number: '12121212',
-            date: '2017-09-12',
-            type: '销售',
-            money: 100
-        }, {
-            operator: '小张',
-            number: '12121212',
-            date: '2017-09-12',
-            type: '销售',
-            money: 100
-        }, {
-            operator: '张老板',
-            number: '12121212',
-            date: '2017-09-12',
-            type: '销售',
-            money: 100
-        },],
+        records: [],
         selectedType: null,
         showModal: false,
         types: [
@@ -97,6 +61,10 @@ class Record extends React.Component {
             }],
         ]
     }
+    //在页面渲染完成后加载数据
+    componentDidMount() {
+        this._getRecords(null);
+    }
     //记录分类选择器改变后的回调
     _onChange = (value) => {
         debugger
@@ -112,12 +80,8 @@ class Record extends React.Component {
     }
     //响应后台，获取记录数据
     _getRecords = (params) => {
-        recordService.getRecords(params).then(data => {
-            this.setState({
-                records: data
-            })
-        }).catch(error => {
-
+        this.setState({
+            records: recordService.getRecords(params)
         })
     }
     //选择分类的回调
@@ -198,7 +162,7 @@ class Record extends React.Component {
                         }}
                         onChangeText={this._onSearch}
                     />
-                    <FontAwesomeIcon size={28} name='calendar' style={{ color: this.state.selectedDate?'#108ee9':'#989898' }} onPress={this._openCalendar} />
+                    <FontAwesomeIcon size={28} name='calendar' style={{ color: this.state.selectedDate ? '#108ee9' : '#989898' }} onPress={this._openCalendar} />
                 </View>
                 <Modal
                     visible={this.state.showModal}

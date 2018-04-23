@@ -2,7 +2,7 @@
  * @Author: zuhong.wu 
  * @Date: 2018-03-24 19:33:42 
  * @Last Modified by: zuhong.wu
- * @Last Modified time: 2018-04-23 08:57:38
+ * @Last Modified time: 2018-04-23 10:20:19
  */
 'use strict';
 
@@ -141,7 +141,7 @@ const App = StackNavigator({
     }
   },
 }, {
-    initialRouteName: "Index"
+    initialRouteName: "Login"
   });
 
 const styles = StyleSheet.create({

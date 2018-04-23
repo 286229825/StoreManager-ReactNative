@@ -2,7 +2,7 @@
  * @Author: zuhong.wu 
  * @Date: 2018-04-02 12:03:23 
  * @Last Modified by: zuhong.wu
- * @Last Modified time: 2018-04-02 16:10:05
+ * @Last Modified time: 2018-04-23 10:06:44
  */
 'use strict';
 
@@ -31,65 +31,7 @@ import Common from '../common';
 class GoodsList extends React.Component {
     state = {
         isRefreshing: false,
-        sections: [
-            {
-                key: 'A', data: [
-                    { title: 'Item In Header Section', text: 'Section s1', key: '0' },
-                ]
-            },
-            {
-                key: 'B', data: [
-                    { title: 'Item In Header Section', text: 'Section s1', key: '0' },
-                ]
-            },
-            {
-                key: 'C', data: [
-                    { title: 'Item In Header Section', text: 'Section s1', key: '0' },
-                ]
-            },
-            {
-                key: 'D', data: [
-                    { noImage: true, title: 'First item', text: 'Section s2', key: 'D0' },
-                    { noImage: true, title: 'Second item', text: 'Section s2', key: 'D1' },
-                ]
-            },
-            {
-                key: 'E', data: [
-                    { noImage: true, title: 'First item', text: 'Section s2', key: '0' },
-                    { noImage: true, title: 'Second item', text: 'Section s2', key: '1' },
-                ]
-            },
-            {
-                key: 'F', data: [
-                    { noImage: true, title: 'First item', text: 'Section s2', key: '0' },
-                    { noImage: true, title: 'Second item', text: 'Section s2', key: '1' },
-                ]
-            },
-            {
-                key: 'G', data: [
-                    { noImage: true, title: 'First item', text: 'Section s2', key: '0' },
-                    { noImage: true, title: 'Second item', text: 'Section s2', key: '1' },
-                ]
-            },
-            {
-                key: 'H', data: [
-                    { noImage: true, title: 'First item', text: 'Section s2', key: '0' },
-                    { noImage: true, title: 'Second item', text: 'Section s2', key: '1' },
-                ]
-            },
-            {
-                key: 'I', data: [
-                    { noImage: true, title: 'First item', text: 'Section s2', key: '0' },
-                    { noImage: true, title: 'Second item', text: 'Section s2', key: '1' },
-                ]
-            },
-            {
-                key: 'J', data: [
-                    { noImage: true, title: 'First item', text: 'Section s2', key: '0' },
-                    { noImage: true, title: 'Second item', text: 'Section s2', key: '1' },
-                ]
-            },
-        ]
+        sections: []
     }
 
     constructor(props) {
@@ -108,6 +50,15 @@ class GoodsList extends React.Component {
 
     componentDidMount() {
     }
+
+    //若props中的goodsList改变了，并且它的里面是有数据的，则将其赋值到sections
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.goodsList.length > 0) {
+            this.setState({
+                sections: nextProps.goodsList
+            })
+        }
+    }
     //商品项组件，支持滑动显示操作按钮
     _renderItemComponent = ({ item }) => (
         <SwipeAction
@@ -116,21 +67,21 @@ class GoodsList extends React.Component {
             right={[
                 {
                     text: 'Cancel',
-                    onPress: () => {return null},
+                    onPress: () => { return null },
                     style: { backgroundColor: '#ddd', color: 'white' },
                 },
                 {
                     text: 'Delete',
-                    onPress: () => {return null},
+                    onPress: () => { return null },
                     style: { backgroundColor: '#F4333C', color: 'white' },
                 },
             ]}
-            onOpen={()=>{return null}}
-            onClose={()=>{return null}}
+            onOpen={() => { return null }}
+            onClose={() => { return null }}
         >
             <List.Item
                 arrow="empty"
-                thumb={<Image source={{ uri: item.key }} style={{ width: 50, height: 50, marginRight: 10 }} />}
+                thumb={<Image source={require('../assets/login.png')} style={{ width: 50, height: 50, marginRight: 10 }} />}
                 multipleLine
                 onClick={() => { }}
             >

@@ -2,7 +2,7 @@
  * @Author: zuhong.wu 
  * @Date: 2018-03-27 10:35:50 
  * @Last Modified by: zuhong.wu
- * @Last Modified time: 2018-04-02 18:40:56
+ * @Last Modified time: 2018-04-23 09:49:41
  */
 'use strict';
 
@@ -11,7 +11,7 @@
  */
 
 import React from 'react';
-import { View, Text, Picker, TextInput, Image, RefreshControl, ScrollView,SectionList } from 'react-native';
+import { View, Text, Picker, TextInput, Image, RefreshControl, ScrollView, SectionList } from 'react-native';
 import { List, WhiteSpace, Toast } from 'antd-mobile';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Common from '../common';
@@ -21,14 +21,26 @@ import Components from '../components';
 
 class Goods extends React.Component {
     state = {
-        goodsTypes: [
-            { name: '食品', value: 'food' },
-            { name: '书籍', value: 'book' },
-            { name: '电器', value: 'electrical' },
-            { name: '文具', value: 'stationery' },
-            { name: '日化', value: 'daily' },
-        ],
+        goodsTypes: [],
+        goodsList: [],
         selectedType: 'all',
+    }
+    //在页面渲染完成后加载数据
+    componentDidMount() {
+        this.getGoodsList(null);
+        this.getGoodsTypes(null);
+    }
+    //获取商品类别
+    getGoodsTypes = (params) => {
+        this.setState({
+            goodsTypes: goodsService.getGoodsTypes(params)
+        })
+    }
+    //获取商品列表
+    getGoodsList = (params) => {
+        this.setState({
+            goodsList: goodsService.getGoods(params)
+        })
     }
     //点击盘点，打开盘点页面
     checkClick = () => {
@@ -48,11 +60,7 @@ class Goods extends React.Component {
     //点击刷新图标，刷新商品列表
     refreshClick = () => {
         Toast.loading('刷新中…', 0);
-        goodsService.getGoods(null).then(data => {
-
-        }).catch(error => {
-            Toast.fail('刷新失败！', 2);
-        })
+        this.getGoodsList(null);
     }
     render() {
         const newGoodsTypes = [{ name: '全部类别', value: 'all' }, ...this.state.goodsTypes];
@@ -121,7 +129,7 @@ class Goods extends React.Component {
                         <Icon size={24} name='md-qr-scanner' style={{ color: '#909090' }} onPress={this.scanClick} />
                     </View>
                 </View>
-                <Components.GoodsList />
+                <Components.GoodsList goodsList={this.state.goodsList} />
             </View>
         )
     }
